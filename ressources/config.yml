@@ -1,0 +1,17 @@
+menu:
+  lines: 5
+  title: "§6§lMenu"
+  fill_inventory: RED_STAINED_GLASS_PANE
+  content:
+    10:
+      type: GRASS_BLOCK
+      name: "§d§lCREATIF"
+      lore:
+        - "§bDescription:"
+        - "§7  Construisez seul ou entre"
+        - "§7  amis le plot de vos rêves!"
+        - "§f"
+        - "§9>>> {creatif.playercount} joueurs en créatif !"
+      isEnchanted: false
+      action:
+        sendTo: "creatif"
