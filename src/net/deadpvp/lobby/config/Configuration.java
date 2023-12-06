@@ -8,21 +8,21 @@ import java.io.*;
 
 public class Configuration {
 
-    private final File file;
-    private final FileConfiguration fileConfiguration;
+    private File file;
+    private FileConfiguration fileConfiguration;
     private final File dataFolder;
 
     public Configuration(File dataFolder) {
         this.dataFolder = dataFolder;
+        this.loadFileData();
+    }
+
+    public void loadFileData() {
         this.file = new File(dataFolder,"config.yml");
         this.createIfNotExist(this.file);
         this.fileConfiguration = YamlConfiguration.loadConfiguration(this.file);
-        this.loadData();
     }
 
-    private void loadData() {
-
-    }
 
     private void createIfNotExist(File file) {
         if(!file.exists()){

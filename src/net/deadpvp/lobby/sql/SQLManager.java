@@ -25,7 +25,7 @@ public class SQLManager {
 
         try {
             synchronized (this) {
-                if (getConnection() != null && !getConnection().isClosed()) {
+                if (this.getConnection() != null && !this.getConnection().isClosed()) {
                     return;
                 }
                 this.connection = DriverManager.getConnection("jdbc:mariadb://" + host + ":"+ port + "/" + database, username, password);
@@ -41,6 +41,14 @@ public class SQLManager {
     }
 
     public boolean isConnected() throws SQLException {
-        return this.connection != null && !this.connection.isClosed() || this.SECURITY_BYPASS;
+        return this.connection != null && !this.connection.isClosed() || SQLManager.SECURITY_BYPASS;
+    }
+
+    public void close() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

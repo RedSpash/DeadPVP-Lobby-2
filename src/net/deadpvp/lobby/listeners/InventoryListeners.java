@@ -1,23 +1,33 @@
 package net.deadpvp.lobby.listeners;
 
-import net.deadpvp.lobby.guiManager.PlayerMenu;
+import net.deadpvp.lobby.menu.MainMenu;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
 
 public class InventoryListeners implements Listener {
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) throws IOException {
-        InventoryHolder holder = e.getClickedInventory().getHolder();
+    private final MainMenu mainMenu;
 
-        if(holder instanceof PlayerMenu menu){
-            e.setCancelled(true);
-            if(e.getCurrentItem() == null) return;
-            menu.eventHandler(e);
+    public InventoryListeners(MainMenu mainMenu) {
+        this.mainMenu = mainMenu;
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        if(e.getWhoClicked() instanceof Player p && (!p.isOp() && p.getGameMode() != GameMode.CREATIVE)){
+                e.setCancelled(true);
+        }
+        InventoryView inventory = e.getView();
+        if(inventory.getTitle().equals(this.mainMenu.getTitle())){
+            this.mainMenu.eventHandler(e);
         }
     }
 }
