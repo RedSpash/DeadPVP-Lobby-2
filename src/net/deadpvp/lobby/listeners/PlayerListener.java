@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,12 +59,28 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    public void foodLost(FoodLevelChangeEvent e){
+        e.setCancelled(true);
+        e.setFoodLevel(20);
+    }
+
+    @EventHandler
+    public void expChangeEvent(PlayerExpChangeEvent e){
+        e.setAmount(0);
+    }
+
+    @EventHandler
+    public void expChangeEvent(PlayerLevelChangeEvent e){
+        e.getPlayer().setLevel(0);
+    }
+
+    @EventHandler
     public void onInteract (PlayerInteractEvent e) {
         Player player = e.getPlayer();
         ItemStack it = e.getItem();
         if(it == null) return;
         if(!e.getAction().equals(Action.PHYSICAL)) {
-            if(e.getPlayer().getItemInHand().getType().equals(Material.COMPASS)) {
+            if(e.getPlayer().getItemInHand().getType().equals(Material.RECOVERY_COMPASS)) {
                 e.setCancelled(true);
                 player.openInventory(mainMenu.getInventory());
             }
@@ -77,13 +94,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e){
-        if(!e.getPlayer ().isOp() && e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
+        if(!e.getPlayer().isOp() || e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
     }
 
     @EventHandler
     public void onPickup(EntityPickupItemEvent e){
         if(e.getEntity() instanceof  Player p){
-            if(!p.isOp() && p.getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
+            if(!p.isOp() || p.getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
         }else{
             e.setCancelled(true);
         }

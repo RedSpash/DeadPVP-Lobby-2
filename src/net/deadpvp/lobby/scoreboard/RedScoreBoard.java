@@ -1,34 +1,33 @@
 package net.deadpvp.lobby.scoreboard;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+import net.deadpvp.lobby.variables.VariableManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class RedScoreBoard {
 
-    private HashMap<Integer,Team> Lines = new HashMap<>();
-    private Scoreboard board;
-    private UUID playerUUID;
-    private String title;
-    private Objective objective;
+    private final HashMap<Integer,Team> lines;
+    private final Scoreboard board;
+    private final Objective objective;
+    private static final ArrayList<ChatColor> chatColors = new ArrayList<>(Arrays.asList(ChatColor.values()));
+    private final VariableManager variableManager;
+    private ArrayList<String> lineText;
+    private final UUID uuid;
 
-    private static ArrayList<ChatColor> chatColors = new ArrayList<>(Arrays.asList(ChatColor.values()));
-
-    public RedScoreBoard(Player p, String title){
-        this.playerUUID = p.getUniqueId();
-        this.title = title;
+    public RedScoreBoard(Player p, String title,ArrayList<String> lineText, VariableManager variableManager){
+        this.variableManager = variableManager;
+        this.lineText = lineText;
+        this.lines = new HashMap<>();
         this.board = Bukkit.getScoreboardManager().getNewScoreboard();
+        this.uuid = p.getUniqueId();
         this.objective = board.registerNewObjective(title,"dummy");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        this.update();
     }
 
     public Team getTeam(String name){
@@ -41,10 +40,10 @@ public class RedScoreBoard {
 
 
     public void setLine(Integer position, String text){
-        if(!Lines.containsKey(position)){
+        if(!lines.containsKey(position)){
             this.createTeam(position,text);
         }else{
-            this.setTeamName(Lines.get(position),text,position);
+            this.setTeamName(lines.get(position),text,position);
         }
     }
 
@@ -56,7 +55,7 @@ public class RedScoreBoard {
 
         setTeamName(team,text,position);
 
-        Lines.put(position,team);
+        lines.put(position,team);
     }
 
     private void setTeamName(Team team, String text, Integer position) {
@@ -67,4 +66,19 @@ public class RedScoreBoard {
         return board;
     }
 
+    public void update() {
+        Player p = Bukkit.getPlayer(this.uuid);
+        if(p != null && p.isOnline()){
+            int index = 0;
+            for(String line : this.lineText){
+                this.setLine(index,this.variableManager.getStringWithReplacedVariables(line, p));
+                index = index +1;
+            }
+        }
+    }
+
+    public void updateLines(Collection<String> lines) {
+        this.lineText = new ArrayList<>(lines);
+        this.update();
+    }
 }

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 public class SQLManager {
 
-    private static final boolean SECURITY_BYPASS = true;
     private Connection connection;
 
     public SQLManager(){
@@ -41,12 +40,14 @@ public class SQLManager {
     }
 
     public boolean isConnected() throws SQLException {
-        return this.connection != null && !this.connection.isClosed() || SQLManager.SECURITY_BYPASS;
+        return this.connection != null && !this.connection.isClosed();
     }
 
     public void close() {
         try {
-            this.connection.close();
+            if(this.connection != null){
+                this.connection.close();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -11,14 +11,12 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BungeeManager implements PluginMessageListener {
 
     public static final String BUNGEE_CORD_CHANNEL = "BungeeCord";
     private final HashMap<String,Integer> serverPlayerCount;
-
     public BungeeManager(){
         this.serverPlayerCount = new HashMap<>();
     }
@@ -70,6 +68,13 @@ public class BungeeManager implements PluginMessageListener {
     }
 
     public int getConnectedPlayer(String server){
+        if(server.equalsIgnoreCase("all")){
+            int result = 0;
+            for(int value : this.serverPlayerCount.values()){
+                result = result + value;
+            }
+            return result;
+        }
         return this.serverPlayerCount.getOrDefault(server, 0);
     }
 
@@ -78,6 +83,5 @@ public class BungeeManager implements PluginMessageListener {
             Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
             this.updateServerList(player);
         }
-
     }
 }

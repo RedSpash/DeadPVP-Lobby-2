@@ -23,10 +23,11 @@ public class InventoryListeners implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if(e.getWhoClicked() instanceof Player p && (!p.isOp() && p.getGameMode() != GameMode.CREATIVE)){
-                e.setCancelled(true);
+            e.setCancelled(true);
         }
         InventoryView inventory = e.getView();
         if(inventory.getTitle().equals(this.mainMenu.getTitle())){
+            e.setCancelled(true);
             this.mainMenu.eventHandler(e);
         }
     }

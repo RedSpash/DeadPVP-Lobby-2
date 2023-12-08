@@ -8,6 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class ProtectionListener implements Listener {
@@ -36,12 +37,21 @@ public class ProtectionListener implements Listener {
 
     @EventHandler
     public void onPlace(BlockPlaceEvent e){
-        if(!e.getPlayer ().isOp() && e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
+        if(!e.getPlayer ().isOp() || e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
     }
 
     @EventHandler
     public void onBreak(BlockBreakEvent e){
-        if(!e.getPlayer ().isOp() && e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
+        if(!e.getPlayer ().isOp() || e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
     }
+
+    @EventHandler
+    public void onBreak(PlayerTeleportEvent e){
+        if(e.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL || e.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL){
+            e.setCancelled(true);
+        }
+    }
+
+
 
 }

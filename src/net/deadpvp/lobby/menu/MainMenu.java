@@ -1,9 +1,11 @@
 package net.deadpvp.lobby.menu;
 
+import net.deadpvp.lobby.Utils;
 import net.deadpvp.lobby.config.Configuration;
 import net.deadpvp.lobby.menu.commands.*;
 import net.deadpvp.lobby.server.BungeeManager;
 import net.deadpvp.lobby.utils.ItemStackBuilder;
+import net.deadpvp.lobby.variables.VariableManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -22,6 +24,7 @@ import java.util.List;
 public class MainMenu extends BukkitRunnable {
 
     public static final String FILE_CONFIGURATION_KEY = "menu.";
+    private final VariableManager variableManager;
     private Inventory inventory;
     private int size;
     private String title;
@@ -30,9 +33,10 @@ public class MainMenu extends BukkitRunnable {
     private final HashMap<String, ArrayList<Command>> actions;
     private final BungeeManager bungeeManager;
 
-    public MainMenu(Configuration configuration,BungeeManager bungeeManager) {
+    public MainMenu(Configuration configuration, BungeeManager bungeeManager, VariableManager variableManager) {
         this.bungeeManager = bungeeManager;
         this.actions = new HashMap<>();
+        this.variableManager = variableManager;
 
         this.reloadData(configuration);
     }
@@ -94,9 +98,11 @@ public class MainMenu extends BukkitRunnable {
     }
 
     private void fillInventory(Material fillMaterial) {
-        ItemStack itemStack = new ItemStackBuilder(fillMaterial).setName("§f").hideAttributes().toItemStack();
-        for(int i = 0; i < this.size; i++){
-            this.inventory.setItem(i,itemStack);
+        if(fillMaterial != Material.AIR){
+            ItemStack itemStack = new ItemStackBuilder(fillMaterial).setName("§f").hideAttributes().toItemStack();
+            for(int i = 0; i < this.size; i++){
+                this.inventory.setItem(i,itemStack);
+            }
         }
     }
 
@@ -113,39 +119,22 @@ public class MainMenu extends BukkitRunnable {
                     break;
                 }
             }
-
         }
-
     }
 
     public void updateData(){
         for(ItemStack itemStack : this.inventory.getContents()){
-            if(itemStack.hasItemMeta()){
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                if(itemMeta.hasDisplayName()){
-                    if(this.actions.containsKey(itemMeta.getDisplayName()) && (itemMeta.hasLore())){
-                            ArrayList<String> lore = new ArrayList<>(itemMeta.getLore());
-                            ArrayList<String> editedLore = new ArrayList<>();
-                            for(String line : lore){
-                                String trueLine = line;
-                                if(line.contains("{") && line.contains("}")){
-                                    String element = line.split("\\{")[1];
-                                    element = element.split("\\}")[0];
-                                    String server = element.split("\\.")[0];
-                                    String before ="";
-                                    if(server.startsWith("§")){
-                                        before = server.substring(0,2);
-                                        server = server.substring(2);
-                                    }
-                                    String elementToShow = element.split("\\.")[1];
-                                    if(elementToShow.equalsIgnoreCase("playercount")){
-                                        trueLine = trueLine.replace("{"+before+server+"."+elementToShow+"}",this.bungeeManager.getConnectedPlayer(server)+"");
-                                    }
-                                }
-                                editedLore.add(trueLine);
-                            }
-                            itemMeta.setLore(editedLore);
-                            itemStack.setItemMeta(itemMeta);
+            if(itemStack != null){
+                if(itemStack.hasItemMeta()){
+                    ItemMeta itemMeta = itemStack.getItemMeta();
+                    if(itemMeta.hasDisplayName() && (this.actions.containsKey(itemMeta.getDisplayName()) && (itemMeta.hasLore()))){
+                        ArrayList<String> lore = new ArrayList<>(itemMeta.getLore());
+                        ArrayList<String> editedLore = new ArrayList<>();
+                        for(String line : lore){
+                            editedLore.add(this.variableManager.getStringWithReplacedVariables(line));
+                        }
+                        itemMeta.setLore(editedLore);
+                        itemStack.setItemMeta(itemMeta);
                     }
                 }
             }
@@ -153,7 +142,9 @@ public class MainMenu extends BukkitRunnable {
     }
 
     public Inventory getInventory() {
-        return this.inventory;
+        Inventory inventory1 = Bukkit.createInventory(null,this.size,this.title);
+        inventory1.setContents(this.inventory.getContents());
+        return inventory1;
     }
 
     public String getTitle() {

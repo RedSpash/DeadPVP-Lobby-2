@@ -1,28 +1,15 @@
 scoreboard:
   title: "§a§lDEADPVP"
   lines:
-
-
-explications_du_menu:
-    """
-    'fill_inventory' et 'type' doivent être de type MATERIAL (https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html)
-  
-    Actions disponibles : 
-      - sendTo: <nom du serveur> | Permet d'envoyer le joueur sur un serveur
-      - sendMessage: <message>   | Permet d'envoyer un message au joueur
-      - execute: <commande>      | Permet d'éxécuter une commande à la place du joueur
-      - teleportTo:              | Permet de téléporter le joueur à un endroit (nécessite les paramètres en dessous)
-          x: <coordonée X>
-          y: <coordonée Y>
-          z: <coordonée Z>
-          pitch: <direction pitch>
-          yaw: <direction yaw>
-          world: <Nom du monde, non obligatoire>
-  """
+    - "Liste des variables possibles"
+    - "{player} -> nom du joueur"
+    - "{server.playercount} -> (server peut être 'all')"
+    - "{rank}"
+    - "{rankcolor}"
 menu:
   lines: 5
   title: "§6§lMenu"
-  fill_inventory: RED_STAINED_GLASS_PANE
+  fill_inventory: AIR
   content:
     10:
       type: GRASS_BLOCK
@@ -44,3 +31,15 @@ menu:
           pitch: 0
           yaw: 0
         execute: "say Hello !"
+    15:
+      type: STONE
+      name: "§d§lTRUC"
+      lore:
+        - "§bDescription:"
+        - "§7  Construisez seul ou entre"
+        - "§7  amis le plot de vos rêves!"
+        - "§f"
+        - "§9>>> {creatif.playercount} joueurs en créatif !"
+      isEnchanted: false
+      actions:
+        sendMessage: "www.deadpvp.net"
