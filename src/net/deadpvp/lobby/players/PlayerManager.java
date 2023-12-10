@@ -1,6 +1,7 @@
 package net.deadpvp.lobby.players;
 
 import net.deadpvp.lobby.DeadPvpPlayer;
+import net.deadpvp.lobby.rank.RankManager;
 import net.deadpvp.lobby.sql.SQLManager;
 import org.bukkit.entity.Player;
 
@@ -10,19 +11,28 @@ import java.util.UUID;
 public class PlayerManager {
 
     private final HashMap<UUID,DeadPvpPlayer> playerData;
-    private final SQLManager sqlManager;
+    private RankManager rankManager;
 
-    public PlayerManager(SQLManager sqlManager){
+    public PlayerManager(RankManager rankManager){
         this.playerData = new HashMap<>();
-        this.sqlManager = sqlManager;
+        this.rankManager = rankManager;
     }
 
     public void insertNewPlayer(Player p){
-        this.playerData.put(p.getUniqueId(),new DeadPvpPlayer(p,this.sqlManager));
+        this.playerData.put(p.getUniqueId(),new DeadPvpPlayer(p,this.rankManager));
     }
 
     public DeadPvpPlayer getData(UUID uuid){
         return this.playerData.getOrDefault(uuid,null);
     }
 
+    public void removePlayer(Player player) {
+        this.playerData.remove(player.getUniqueId());
+    }
+
+    public void updateData() {
+        for(DeadPvpPlayer deadPvpPlayer : this.playerData.values()){
+            deadPvpPlayer.updateData();
+        }
+    }
 }

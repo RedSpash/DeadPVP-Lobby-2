@@ -1,6 +1,9 @@
 package net.deadpvp.lobby;
 
+import net.deadpvp.lobby.rank.Rank;
+import net.deadpvp.lobby.rank.RankManager;
 import net.deadpvp.lobby.sql.SQLManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
@@ -10,30 +13,32 @@ import java.util.UUID;
 
 public class DeadPvpPlayer {
 
-    private final SQLManager sqlManager;
+    private final RankManager rankManager;
     private String rankName;
     private String rankColor;
     private final UUID uuid;
 
-    public DeadPvpPlayer(Player p, SQLManager sqlManager){
+    public DeadPvpPlayer(Player p, RankManager rankManager){
         this.uuid = p.getUniqueId();
-        this.sqlManager = sqlManager;
+        this.rankManager = rankManager;
 
         this.updateData();
     }
 
-    private void updateData() {
+    public void updateData() {
+        Player p = Bukkit.getPlayer(this.uuid);
+
         this.rankName = "Chargement...";
         this.rankColor = "§7";
-        if(true){
-            return;
-        }
-        try {
-            Connection connection = sqlManager.getConnection();
-            Statement statement = connection.createStatement();
-            statement.execute("SELECT ");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+        if(p != null){
+            for(Rank rank : this.rankManager.getRanks()){
+                if(rank.hasPermission(p)){
+                    this.rankName = rank.getName();
+                    this.rankColor = rank.getColor();
+                    break;
+                }
+            }
         }
     }
 

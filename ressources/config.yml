@@ -1,45 +1,155 @@
+spawn:
+  x: 0.5
+  y: 75.5
+  z: 0.5
+  yaw: 0
+  pitch: 0
+  radius: 2
 scoreboard:
-  title: "§a§lDEADPVP"
+  title: "§4§lDEAD§1§lPVP"
   lines:
-    - "Liste des variables possibles"
-    - "{player} -> nom du joueur"
-    - "{server.playercount} -> (server peut être 'all')"
-    - "{rank}"
-    - "{rankcolor}"
+    - "§b§m+---------------+"
+    - "§b> §eJoueur §f:"
+    - "§a{player}"
+    - " "
+    - "§b> §eConnectés §f:"
+    - "§a{all.playercount}"
+    - " "
+    - "§b> §eGrade §f:"
+    - "§a{rankcolor}{rank}"
+    - " "
+    - "mc.deadpvp.net"
+    - "§b§m+---------------+"
 menu:
   lines: 5
-  title: "§6§lMenu"
+  title: "      §e§lChoisis un serveur"
   fill_inventory: AIR
   content:
-    10:
-      type: GRASS_BLOCK
-      name: "§d§lCREATIF"
+    0:
+      type: RED_STAINED_GLASS_PANE
+      name: " "
+    8:
+      type: RED_STAINED_GLASS_PANE
+      name: " "
+    18:
+      type: BLUE_STAINED_GLASS_PANE
+      name: " "
+    26:
+      type: BLUE_STAINED_GLASS_PANE
+      name: " "
+    27:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    28:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    29:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    30:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    32:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    33:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    34:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    35:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    36:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    37:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    38:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    42:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    43:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    44:
+      type: BLACK_STAINED_GLASS_PANE
+      name: " "
+    2:
+      type: WOODEN_SWORD
+      name: "§6§l>> §bSurvie §6§l<<"
       lore:
-        - "§bDescription:"
-        - "§7  Construisez seul ou entre"
-        - "§7  amis le plot de vos rêves!"
-        - "§f"
-        - "§9>>> {creatif.playercount} joueurs en créatif !"
+        - "§a§nDescription :"
+        - "§f- Ici, construisez avec vos propres resources"
+        - "§f- Achetez des terrain"
+        - "§f- Montez en rang"
+        - "§f- Participer aux raids de donjons"
+        - "§f- complétez des quêtes, et devenez riches !"
+        - " "
+        - "§e{survie.playercount} §7joueurs en jeu"
+        - "§eEtat §7: §aEn ligne"
+      isEnchanted: false
+      actions:
+        sendTo: "survie"
+    6:
+      type: GRASS_BLOCK
+      name: "§6§l>> §bCréatif §6§l<<"
+      lore:
+        - "§a§nDescription :"
+        - "§f- Laissez place à votre imagination"
+        - "§f- en mode créatif décorer votre parcelle"
+        - "§fou celles de vos amis !"
+        - " "
+        - "§e{creatif.playercount} §7joueurs en jeu"
+        - "§eEtat §7: §aEn ligne"
       isEnchanted: false
       actions:
         sendTo: "creatif"
-        sendMessage: "Bonjour"
-        teleportTo:
-          x: 0.0
-          y: 150.0
-          z: 0.0
-          pitch: 0
-          yaw: 0
-        execute: "say Hello !"
-    15:
-      type: STONE
-      name: "§d§lTRUC"
+    20:
+      type: NETHER_BRICK_FENCE
+      name: "§6§l>> §bTheTower §6§l<<"
       lore:
-        - "§bDescription:"
-        - "§7  Construisez seul ou entre"
-        - "§7  amis le plot de vos rêves!"
-        - "§f"
-        - "§9>>> {creatif.playercount} joueurs en créatif !"
+        - "§c§lComming soon.. <3"
+    24:
+      type: COOKED_BEEF
+      name: "§6§l>> §bHunger Games §6§l<<"
+      lore:
+        - "§c§lComming soon.. <3"
+    31:
+      type: PLAYER_HEAD
+      name: "§6§l>> §dVos stats §6§l<<"
+      lore:
+        - "§c§lComming soon.. <3"
+    39:
+      type: NAME_TAG
+      name: "§6§l>> §eBoutique §6§l<<"
+      lore:
+        - "§fLa Boutique du serveur"
+        - "§ddeadpvp.net/boutique"
+      inEnchanted: false
+      actions:
+        sendMessage: "§6§l>> §8§lAccède à notre boutique ici §9§ndeadpvp.net/boutique"
+    40:
+      type: NETHER_STAR
+      name: "§6§l>> §3Notre site §6§l<<"
+      lore:
+        - "§fLe site du serveur"
+        - "§ddeadpvp.net"
       isEnchanted: false
       actions:
-        sendMessage: "www.deadpvp.net"
+        sendMessage: "§6§l>> §8§lAccède au site ici: §9§ndeadpvp.net"
+    41:
+      type: GOAT_HORN
+      name: "§c§l>> §9Discord §c§l<<"
+      lore:
+        - "§fRejoins notre communauté !"
+        - "§fLiens d'invitation:"
+        - "§d(insérer ici)"
+      isEnchanted: false
+      actions:
+        sendMessage: "§6§l>> §8§lAccède à notre Discord: §9§ndiscord.gg/leliens"
+

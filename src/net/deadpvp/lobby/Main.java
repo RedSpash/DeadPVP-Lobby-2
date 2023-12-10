@@ -7,6 +7,7 @@ import net.deadpvp.lobby.listeners.PlayerListener;
 import net.deadpvp.lobby.listeners.ProtectionListener;
 import net.deadpvp.lobby.menu.MainMenu;
 import net.deadpvp.lobby.players.PlayerManager;
+import net.deadpvp.lobby.rank.RankManager;
 import net.deadpvp.lobby.scoreboard.ScoreboardManager;
 import net.deadpvp.lobby.server.BungeeManager;
 import net.deadpvp.lobby.sql.SQLManager;
@@ -26,6 +27,8 @@ public class Main extends JavaPlugin {
     private ScoreboardManager scoreboardManager;
     private PlayerManager playerManager;
     private VariableManager variableManager;
+    private PlayerListener playerListener;
+    private RankManager rankManager;
 
     public static Main getInstance() {
         return instance;
@@ -36,21 +39,23 @@ public class Main extends JavaPlugin {
         Main.instance = this;
         try{
             this.sqlManager = new SQLManager();
-            if(!this.sqlManager.isConnected() && false){
+            if(!this.sqlManager.isConnected()){
                 Bukkit.getConsoleSender().sendMessage("§cImpossible de connecter la base de donnée !");
                 Bukkit.getServer().setWhitelist(true);
-                return;
+                //return;
             }
 
-            this.playerManager = new PlayerManager(this.sqlManager);
+            this.rankManager = new RankManager(this.sqlManager);
+            this.playerManager = new PlayerManager(this.rankManager);
             this.bungeeManager = new BungeeManager();
             this.configuration = new Configuration(this.getDataFolder());
             this.variableManager = new VariableManager(this.bungeeManager,this.playerManager);
             this.scoreboardManager = new ScoreboardManager(this.configuration,this.bungeeManager,this.variableManager);
             this.mainMenu = new MainMenu(this.configuration,this.bungeeManager,this.variableManager);
 
+            this.playerListener = new PlayerListener(this.configuration,this.mainMenu,this.scoreboardManager,this.playerManager);
             Bukkit.getPluginManager().registerEvents(new ProtectionListener(),this);
-            Bukkit.getPluginManager().registerEvents(new PlayerListener(this.mainMenu),this);
+            Bukkit.getPluginManager().registerEvents(this.playerListener,this);
             Bukkit.getPluginManager().registerEvents(new InventoryListeners(mainMenu),this);
 
             this.mainMenu.runTaskTimer(this, 1L, 20L*60);
@@ -58,7 +63,7 @@ public class Main extends JavaPlugin {
 
             this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-            this.getCommand("update").setExecutor(new UpdateData(this.configuration,this.mainMenu,this.scoreboardManager));
+            this.getCommand("update").setExecutor(new UpdateData(this.configuration,this.playerListener, this.mainMenu,this.scoreboardManager, this.rankManager, this.playerManager));
 
             Bukkit.getServer().setWhitelist(false);
 

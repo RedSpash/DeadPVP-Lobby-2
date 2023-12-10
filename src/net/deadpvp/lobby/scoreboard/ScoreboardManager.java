@@ -64,7 +64,7 @@ public class ScoreboardManager extends BukkitRunnable {
     }
 
 
-    private void updateScoreBoard(Player p) {
+    public void updateScoreBoard(Player p) {
         if(!scoreBoards.containsKey(p.getUniqueId())){
             setScoreboard(p);
         }else{
@@ -77,6 +77,14 @@ public class ScoreboardManager extends BukkitRunnable {
         for(RedScoreBoard scoreBoard : this.scoreBoards.values()){
             scoreBoard.updateLines(this.lines.values());
             scoreBoard.update();
+        }
+    }
+
+    public void updateScoreBoardShow(Player p) {
+        if(scoreBoards.containsKey(p.getUniqueId())){
+            p.setScoreboard(scoreBoards.get(p.getUniqueId()).getBoard());
+        }else{
+            this.setScoreboard(p);
         }
     }
 }
