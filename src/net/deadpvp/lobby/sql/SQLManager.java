@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class SQLManager {
 
@@ -18,20 +19,21 @@ public class SQLManager {
     private void mysqlSetup() {
         String host = "localhost";
         int port = 3306;
-        String database = "minecraftrebased";
+        String database = "DEADPVP";
         String username = "root";
-        String password = "";
+        String password = "KJ7%td?byEkRXc68#Q";
 
         try {
             synchronized (this) {
                 if (this.getConnection() != null && !this.getConnection().isClosed()) {
                     return;
                 }
-                this.connection = DriverManager.getConnection("jdbc:mariadb://" + host + ":"+ port + "/" + database, username, password);
+                this.connection = DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+database, username,password);
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL CONNECTED");
             }
         } catch (SQLException throwable) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "MYSQL ERROR "+throwable.getMessage());
+            throwable.printStackTrace();
         }
     }
 
