@@ -1,3 +1,10 @@
+title:
+  title: "§4§lDEAD§1§lPVP"
+  subtitle: "§aBienvenue {player} sur §4DEAD§1PVP§a !"
+  fade:
+    in: 20
+    time: 60
+    out: 10
 spawn:
   x: 0.5
   y: 75.5
@@ -13,7 +20,7 @@ scoreboard:
     - "§a{player}"
     - " "
     - "§b> §eConnectés §f:"
-    - "§a{all.playercount}"
+    - "§a{all.playercount} joueurs"
     - " "
     - "§b> §eGrade §f:"
     - "§a{rankcolor}{rank}"
@@ -88,13 +95,14 @@ menu:
         - "§f- Achetez des terrain"
         - "§f- Montez en rang"
         - "§f- Participer aux raids de donjons"
-        - "§f- complétez des quêtes, et devenez riches !"
+        - "§f- Complétez des quêtes, et devenez riches !"
         - " "
         - "§e{survie.playercount} §7joueurs en jeu"
         - "§eEtat §7: §aEn ligne"
       isEnchanted: false
       actions:
         sendTo: "survie"
+        inventory: "close"
     6:
       type: GRASS_BLOCK
       name: "§6§l>> §bCréatif §6§l<<"
@@ -109,6 +117,7 @@ menu:
       isEnchanted: false
       actions:
         sendTo: "creatif"
+        inventory: "close"
     20:
       type: NETHER_BRICK_FENCE
       name: "§6§l>> §bTheTower §6§l<<"
@@ -133,6 +142,7 @@ menu:
       inEnchanted: false
       actions:
         sendMessage: "§6§l>> §8§lAccède à notre boutique ici §9§ndeadpvp.net/boutique"
+        inventory: "close"
     40:
       type: NETHER_STAR
       name: "§6§l>> §3Notre site §6§l<<"
@@ -141,7 +151,8 @@ menu:
         - "§ddeadpvp.net"
       isEnchanted: false
       actions:
-        sendMessage: "§6§l>> §8§lAccède au site ici: §9§ndeadpvp.net"
+        sendMessage: "§6§l>> §7§lAccède au site ici: §9§ndeadpvp.net"
+        inventory: "close"
     41:
       type: GOAT_HORN
       name: "§c§l>> §9Discord §c§l<<"
@@ -151,5 +162,5 @@ menu:
         - "§d(insérer ici)"
       isEnchanted: false
       actions:
-        sendMessage: "§6§l>> §8§lAccède à notre Discord: §9§ndiscord.gg/leliens"
-
+        sendMessage: "§6§l>> §7§lAccède à notre Discord: §9§ndiscord.gg/leliens"
+        inventory: "close"
