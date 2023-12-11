@@ -21,32 +21,32 @@ public class BungeeManager implements PluginMessageListener {
         this.serverPlayerCount = new HashMap<>();
     }
 
-    public void sendPlayerToServer(Player p, String server) {
+    private void sendMessageChannel(Player p,String subChannel, String message){
         try{
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(b);
-            out.writeUTF("Connect");
-            out.writeUTF(server);
+            out.writeUTF(subChannel);
+            if(message != null){
+                out.writeUTF(message);
+            }
             p.sendPluginMessage(Main.getInstance(), BUNGEE_CORD_CHANNEL, b.toByteArray());
             b.close();
             out.close();
         }catch (IOException exception){
             Bukkit.getConsoleSender().sendMessage("§c"+exception.getMessage());
         }
+    }
 
+    private void sendMessageChannel(Player p, String subChannel) {
+        this.sendMessageChannel(p,subChannel,null);
+    }
+
+    public void sendPlayerToServer(Player p, String server) {
+        this.sendMessageChannel(p,"Connect",server);
     }
 
     public void updateServerList(Player p) {
-        try{
-            ByteArrayOutputStream b = new ByteArrayOutputStream();
-            DataOutputStream out = new DataOutputStream(b);
-            out.writeUTF("GetServers");
-            p.sendPluginMessage(Main.getInstance(), BUNGEE_CORD_CHANNEL, b.toByteArray());
-            b.close();
-            out.close();
-        }catch (IOException exception){
-            Bukkit.getConsoleSender().sendMessage("§c"+exception.getMessage());
-        }
+        this.sendMessageChannel(p,"GetServers");
     }
 
     @Override
@@ -54,14 +54,15 @@ public class BungeeManager implements PluginMessageListener {
         if (!channel.equals(BUNGEE_CORD_CHANNEL)) return;
 
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
-        String subchannel = in.readUTF();
-        if (subchannel.equals("PlayerCount")) {
+        String subChannel = in.readUTF();
+        if (subChannel.equals("PlayerCount")) {
             String server = in.readUTF();
             int playerCount = in.readInt();
             this.serverPlayerCount.put(server,playerCount);
-        } else if (subchannel.equals("GetServers")) {
+        } else if (subChannel.equals("GetServers")) {
             String[] serverList = in.readUTF().split(", ");
             for(String serverName : serverList){
+                this.sendMessageChannel(player,"PlayerCount",serverName);
                 this.serverPlayerCount.putIfAbsent(serverName,0);
             }
         }
