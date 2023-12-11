@@ -33,6 +33,7 @@ public class UpdateData implements CommandExecutor {
             this.configuration.loadFileData();
             this.scoreboardManager.updateData();
             this.playerListener.updateSpawnLocation();
+            this.playerListener.updateWelcomeTitle();
             this.rankManager.updateData();
             this.playerManager.updateData();
             this.mainMenu.reloadData(this.configuration);

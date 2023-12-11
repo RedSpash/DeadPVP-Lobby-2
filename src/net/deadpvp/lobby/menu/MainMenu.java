@@ -1,6 +1,5 @@
 package net.deadpvp.lobby.menu;
 
-import net.deadpvp.lobby.Utils;
 import net.deadpvp.lobby.config.Configuration;
 import net.deadpvp.lobby.menu.commands.*;
 import net.deadpvp.lobby.server.BungeeManager;
@@ -15,8 +14,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,14 +84,15 @@ public class MainMenu extends BukkitRunnable {
                                 String world = this.fileConfiguration.getString(actionPath+".world",null);
                                 command = new TeleportCommand(x,y,z,pitch,yaw,world);
                             }
+                            case "inventory"-> command = new InventoryCommand(this.fileConfiguration.getString(actionPath,""));
+                            default ->
+                                command = new SendMessageCommand("§c§lCette item n'est pas configuré correctement!");
+
                         }
-                        if(command != null){
-                            commands.add(command);
-                        }
+                        commands.add(command);
                     });
                 }
                 this.actions.put(name,commands);
-
             }catch (Exception e){
                 Bukkit.getConsoleSender().sendMessage("§cUne erreur est survenue sur l'élément à la position "+position+" du menu. ("+e.getMessage()+")");
             }
@@ -123,27 +125,36 @@ public class MainMenu extends BukkitRunnable {
     }
 
     public void updateData(){
-        for(ItemStack itemStack : this.inventory.getContents()){
+
+    }
+
+    public Inventory getInventory(Player p) {
+        Inventory inventory1 = Bukkit.createInventory(null,this.size,this.title);
+
+        for(int i =0; i<this.inventory.getSize(); i++){
+            ItemStack itemStack = this.inventory.getItem(i);
             if(itemStack != null){
+                itemStack = itemStack.clone();
                 if(itemStack.hasItemMeta()){
                     ItemMeta itemMeta = itemStack.getItemMeta();
+                    if(itemMeta instanceof SkullMeta skullMeta){
+                        skullMeta.setOwnerProfile(p.getPlayerProfile());
+                        itemStack.setItemMeta(skullMeta);
+                        itemMeta = itemStack.getItemMeta();
+                    }
                     if(itemMeta.hasDisplayName() && (this.actions.containsKey(itemMeta.getDisplayName()) && (itemMeta.hasLore()))){
                         ArrayList<String> lore = new ArrayList<>(itemMeta.getLore());
                         ArrayList<String> editedLore = new ArrayList<>();
                         for(String line : lore){
-                            editedLore.add(this.variableManager.getStringWithReplacedVariables(line));
+                            editedLore.add(this.variableManager.getStringWithReplacedVariables(line,p));
                         }
                         itemMeta.setLore(editedLore);
                         itemStack.setItemMeta(itemMeta);
                     }
                 }
+                inventory1.setItem(i,itemStack);
             }
         }
-    }
-
-    public Inventory getInventory() {
-        Inventory inventory1 = Bukkit.createInventory(null,this.size,this.title);
-        inventory1.setContents(this.inventory.getContents());
         return inventory1;
     }
 
