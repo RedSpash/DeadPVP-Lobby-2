@@ -5,6 +5,7 @@ import net.deadpvp.lobby.menu.MainMenu;
 import net.deadpvp.lobby.players.PlayerManager;
 import net.deadpvp.lobby.scoreboard.ScoreboardManager;
 import net.deadpvp.lobby.utils.ItemStackBuilder;
+import net.deadpvp.lobby.welcome.WelcomeTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -22,10 +23,11 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerListener implements Listener {
 
     private final PlayerManager playerManager;
-    private Location spawn;
     private final MainMenu mainMenu;
     private final ScoreboardManager scoreboardManager;
     private final Configuration configuration;
+    private WelcomeTitle welcomeTitle;
+    private Location spawn;
 
     public PlayerListener(Configuration configuration, MainMenu mainMenu, ScoreboardManager scoreboardManager, PlayerManager playerManager){
         this.mainMenu = mainMenu;
@@ -33,6 +35,20 @@ public class PlayerListener implements Listener {
         this.updateSpawnLocation();
         this.scoreboardManager = scoreboardManager;
         this.playerManager = playerManager;
+
+        this.updateWelcomeTitle();
+    }
+
+    public void updateWelcomeTitle() {
+        FileConfiguration fileConfiguration = this.configuration.getFileConfiguration();
+        String path = "title.";
+        this.welcomeTitle = new WelcomeTitle(
+                fileConfiguration.getString(path+"title","§f"),
+                fileConfiguration.getString(path+"subtitle","§f"),
+                fileConfiguration.getInt(path+"fade.in",0),
+                fileConfiguration.getInt(path+"fade.time",0),
+                fileConfiguration.getInt(path+"fade.out",0)
+        );
     }
 
     public void updateSpawnLocation() {
@@ -62,6 +78,7 @@ public class PlayerListener implements Listener {
         p.setGameMode (GameMode.SURVIVAL);
         p.getInventory ().clear();
         this.setDefaultInventory(p);
+        this.welcomeTitle.sendTitle(p);
         p.teleport(spawn);
         p.setFoodLevel(20);
         p.setHealth(20);
@@ -105,12 +122,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onInteract (PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        ItemStack it = e.getItem();
-        if(it == null) return;
-        if(!e.getAction().equals(Action.PHYSICAL)) {
-            if(e.getPlayer().getItemInHand().getType().equals(Material.RECOVERY_COMPASS)) {
-                e.setCancelled(true);
-                player.openInventory(mainMenu.getInventory());
+        ItemStack item = e.getItem();
+        e.setCancelled(true);
+        if(item == null) return;
+        if(e.getAction().equals(Action.RIGHT_CLICK_AIR) ||
+                e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if(item.getType().equals(Material.RECOVERY_COMPASS)) {
+                player.openInventory(mainMenu.getInventory(player));
             }
         }
     }
