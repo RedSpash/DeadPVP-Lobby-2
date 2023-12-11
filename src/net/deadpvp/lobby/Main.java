@@ -62,6 +62,7 @@ public class Main extends JavaPlugin {
             this.scoreboardManager.runTaskTimer(this,1L,20L*2);
 
             this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+            this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord",this.bungeeManager);
 
             this.getCommand("update").setExecutor(new UpdateData(this.configuration,this.playerListener, this.mainMenu,this.scoreboardManager, this.rankManager, this.playerManager));
 
