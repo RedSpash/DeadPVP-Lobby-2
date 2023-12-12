@@ -15,21 +15,19 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainMenu extends BukkitRunnable {
+public class MainMenu {
 
     public static final String FILE_CONFIGURATION_KEY = "menu.";
     private final VariableManager variableManager;
     private Inventory inventory;
     private int size;
     private String title;
-    private Material fillMaterial;
     private FileConfiguration fileConfiguration;
     private final HashMap<String, ArrayList<Command>> actions;
     private final BungeeManager bungeeManager;
@@ -44,6 +42,7 @@ public class MainMenu extends BukkitRunnable {
 
 
     private void addMainContent() {
+        this.inventory.clear();
         this.fileConfiguration.getConfigurationSection(FILE_CONFIGURATION_KEY+"content").getKeys(false).forEach(position ->{
             String path = FILE_CONFIGURATION_KEY+"content."+ position+".";
             try{
@@ -67,7 +66,7 @@ public class MainMenu extends BukkitRunnable {
                 if(this.fileConfiguration.isSet(path+"actions")){
                     this.fileConfiguration.getConfigurationSection(path+"actions").getKeys(false).forEach(action ->{
                         String actionPath = path+"actions."+action;
-                        Command command = null;
+                        Command command;
                         switch (action.toLowerCase()){
                             case "sendto"->
                                     command = new SendCommand(this.bungeeManager,this.fileConfiguration.getString(actionPath,""));
@@ -113,19 +112,16 @@ public class MainMenu extends BukkitRunnable {
         if(itemStack == null)return;
 
         for(String name : this.actions.keySet()){
-            if(itemStack.hasItemMeta() && itemStack.getItemMeta().hasDisplayName()){
-                if(itemStack.getItemMeta().getDisplayName().equals(name)){
+            if(itemStack.hasItemMeta() &&
+                    itemStack.getItemMeta().hasDisplayName() &&
+                    itemStack.getItemMeta().getDisplayName().equals(name)){
                     for(Command command : this.actions.get(name)){
                         command.execute((Player) e.getWhoClicked());
                     }
                     break;
-                }
+
             }
         }
-    }
-
-    public void updateData(){
-
     }
 
     public Inventory getInventory(Player p) {
@@ -162,12 +158,6 @@ public class MainMenu extends BukkitRunnable {
         return this.title;
     }
 
-    @Override
-    public void run() {
-        this.bungeeManager.updatePlayerCount();
-        this.updateData();
-    }
-
     public void reloadData(Configuration configuration) {
         this.fileConfiguration = configuration.getFileConfiguration();
 
@@ -176,11 +166,10 @@ public class MainMenu extends BukkitRunnable {
         this.title = this.fileConfiguration.getString(FILE_CONFIGURATION_KEY +"title","");
         this.inventory = Bukkit.createInventory(null,this.size,this.title);
 
-        this.fillMaterial = Material.valueOf(this.fileConfiguration.getString(FILE_CONFIGURATION_KEY+"fill_inventory", "AIR").toUpperCase().replace(" ","_"));
+        Material fillMaterial = Material.valueOf(this.fileConfiguration.getString(FILE_CONFIGURATION_KEY+"fill_inventory", "AIR").toUpperCase().replace(" ","_"));
 
-        this.fillInventory(this.fillMaterial);
+        this.fillInventory(fillMaterial);
 
         this.addMainContent();
-        this.updateData();
     }
 }

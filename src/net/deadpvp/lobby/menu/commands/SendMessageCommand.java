@@ -1,6 +1,5 @@
 package net.deadpvp.lobby.menu.commands;
 
-import net.deadpvp.lobby.server.BungeeManager;
 import org.bukkit.entity.Player;
 
 public class SendMessageCommand implements Command{

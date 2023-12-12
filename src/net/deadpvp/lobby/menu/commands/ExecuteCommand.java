@@ -1,7 +1,5 @@
 package net.deadpvp.lobby.menu.commands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class ExecuteCommand implements Command{

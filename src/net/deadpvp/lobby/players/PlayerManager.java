@@ -2,7 +2,6 @@ package net.deadpvp.lobby.players;
 
 import net.deadpvp.lobby.DeadPvpPlayer;
 import net.deadpvp.lobby.rank.RankManager;
-import net.deadpvp.lobby.sql.SQLManager;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

@@ -1,5 +1,6 @@
 package net.deadpvp.lobby.welcome;
 
+import net.deadpvp.lobby.variables.VariableManager;
 import org.bukkit.entity.Player;
 
 public class WelcomeTitle {
@@ -9,8 +10,10 @@ public class WelcomeTitle {
     private final int fadeIn;
     private final int time;
     private final int fadeOut;
+    private final VariableManager variableManager;
 
-    public WelcomeTitle(String title, String subTitle, int fadeIn, int time, int fadeOut){
+    public WelcomeTitle(VariableManager variableManager, String title, String subTitle, int fadeIn, int time, int fadeOut){
+        this.variableManager = variableManager;
         this.title = title;
         this.subTitle = subTitle;
         this.fadeIn= fadeIn;
@@ -19,7 +22,13 @@ public class WelcomeTitle {
     }
 
     public void sendTitle(Player p){
-        p.sendTitle(title,subTitle,fadeIn,time,fadeOut);
+        p.sendTitle(
+                this.variableManager.getStringWithReplacedVariables(title,p),
+                this.variableManager.getStringWithReplacedVariables(subTitle,p),
+                fadeIn,
+                time,
+                fadeOut
+        );
     }
 
 }

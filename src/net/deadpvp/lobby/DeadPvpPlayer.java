@@ -2,13 +2,9 @@ package net.deadpvp.lobby;
 
 import net.deadpvp.lobby.rank.Rank;
 import net.deadpvp.lobby.rank.RankManager;
-import net.deadpvp.lobby.sql.SQLManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.UUID;
 
 public class DeadPvpPlayer {

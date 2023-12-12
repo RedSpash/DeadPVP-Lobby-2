@@ -1,8 +1,6 @@
 package net.deadpvp.lobby.scoreboard;
 
-import com.google.errorprone.annotations.Var;
 import net.deadpvp.lobby.config.Configuration;
-import net.deadpvp.lobby.server.BungeeManager;
 import net.deadpvp.lobby.variables.VariableManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,14 +16,12 @@ public class ScoreboardManager extends BukkitRunnable {
     private final Map<UUID,RedScoreBoard> scoreBoards;
     private final Configuration configuration;
     private final HashMap<Integer,String> lines;
-    private final BungeeManager bungeeManager;
     private VariableManager variableManager;
 
-    public ScoreboardManager(Configuration configuration, BungeeManager bungeeManager, VariableManager variableManager) {
+    public ScoreboardManager(Configuration configuration, VariableManager variableManager) {
         this.scoreBoards = new HashMap<>();
         this.variableManager = variableManager;
         this.lines = new HashMap<>();
-        this.bungeeManager = bungeeManager;
         this.configuration = configuration;
 
         this.reloadData();

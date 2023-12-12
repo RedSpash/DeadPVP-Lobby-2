@@ -1,15 +1,13 @@
 package net.deadpvp.lobby.server.tasks;
 
-import com.google.common.collect.Iterables;
 import net.deadpvp.lobby.server.BungeeManager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class updatePlayerCount implements Runnable {
+public class UpdatePlayerCount extends BukkitRunnable {
 
     private final BungeeManager bungeeManager;
 
-    public updatePlayerCount(BungeeManager bungeeManager) {
+    public UpdatePlayerCount(BungeeManager bungeeManager) {
         this.bungeeManager = bungeeManager;
     }
 

@@ -10,13 +10,12 @@ import net.deadpvp.lobby.players.PlayerManager;
 import net.deadpvp.lobby.rank.RankManager;
 import net.deadpvp.lobby.scoreboard.ScoreboardManager;
 import net.deadpvp.lobby.server.BungeeManager;
+import net.deadpvp.lobby.server.tasks.UpdatePlayerCount;
 import net.deadpvp.lobby.sql.SQLManager;
 import net.deadpvp.lobby.variables.VariableManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.sql.SQLException;
 
 public class Main extends JavaPlugin {
     private SQLManager sqlManager;
@@ -50,15 +49,15 @@ public class Main extends JavaPlugin {
             this.bungeeManager = new BungeeManager();
             this.configuration = new Configuration(this.getDataFolder());
             this.variableManager = new VariableManager(this.bungeeManager,this.playerManager);
-            this.scoreboardManager = new ScoreboardManager(this.configuration,this.bungeeManager,this.variableManager);
+            this.scoreboardManager = new ScoreboardManager(this.configuration,this.variableManager);
             this.mainMenu = new MainMenu(this.configuration,this.bungeeManager,this.variableManager);
 
-            this.playerListener = new PlayerListener(this.configuration,this.mainMenu,this.scoreboardManager,this.playerManager);
+            this.playerListener = new PlayerListener(this.variableManager, this.configuration,this.mainMenu,this.scoreboardManager,this.playerManager);
             Bukkit.getPluginManager().registerEvents(new ProtectionListener(),this);
             Bukkit.getPluginManager().registerEvents(this.playerListener,this);
             Bukkit.getPluginManager().registerEvents(new InventoryListeners(mainMenu),this);
 
-            this.mainMenu.runTaskTimer(this, 1L, 20L*60);
+            new UpdatePlayerCount(this.bungeeManager).runTaskTimer(this, 1L, 20L*60);
             this.scoreboardManager.runTaskTimer(this,1L,20L*2);
 
             this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

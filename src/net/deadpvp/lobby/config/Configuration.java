@@ -29,9 +29,9 @@ public class Configuration {
             try {
                 this.copyYamlFileToDestination("config.yml");
                 file.createNewFile();
-                Bukkit.getConsoleSender().sendMessage("§a§lFile "+file.getName()+".yml created !");
+                Bukkit.getConsoleSender().sendMessage("§a§lFile "+file.getName()+" created !");
             } catch (IOException e) {
-                Bukkit.getConsoleSender().sendMessage("§4§lError: "+file.getName()+".yml");
+                Bukkit.getConsoleSender().sendMessage("§4§lError: "+file.getName());
                 e.printStackTrace();
             }
         }

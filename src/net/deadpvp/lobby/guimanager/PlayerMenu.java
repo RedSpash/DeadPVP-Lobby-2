@@ -1,4 +1,4 @@
-package net.deadpvp.lobby.guiManager;
+package net.deadpvp.lobby.guimanager;
 
 import net.deadpvp.lobby.utils.ItemStackBuilder;
 import org.bukkit.Bukkit;

@@ -5,6 +5,7 @@ import net.deadpvp.lobby.menu.MainMenu;
 import net.deadpvp.lobby.players.PlayerManager;
 import net.deadpvp.lobby.scoreboard.ScoreboardManager;
 import net.deadpvp.lobby.utils.ItemStackBuilder;
+import net.deadpvp.lobby.variables.VariableManager;
 import net.deadpvp.lobby.welcome.WelcomeTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -26,10 +27,12 @@ public class PlayerListener implements Listener {
     private final MainMenu mainMenu;
     private final ScoreboardManager scoreboardManager;
     private final Configuration configuration;
+    private final VariableManager variableManager;
     private WelcomeTitle welcomeTitle;
     private Location spawn;
 
-    public PlayerListener(Configuration configuration, MainMenu mainMenu, ScoreboardManager scoreboardManager, PlayerManager playerManager){
+    public PlayerListener(VariableManager variableManager, Configuration configuration, MainMenu mainMenu, ScoreboardManager scoreboardManager, PlayerManager playerManager){
+        this.variableManager = variableManager;
         this.mainMenu = mainMenu;
         this.configuration = configuration;
         this.updateSpawnLocation();
@@ -43,6 +46,7 @@ public class PlayerListener implements Listener {
         FileConfiguration fileConfiguration = this.configuration.getFileConfiguration();
         String path = "title.";
         this.welcomeTitle = new WelcomeTitle(
+                this.variableManager,
                 fileConfiguration.getString(path+"title","§f"),
                 fileConfiguration.getString(path+"subtitle","§f"),
                 fileConfiguration.getInt(path+"fade.in",0),
@@ -126,10 +130,10 @@ public class PlayerListener implements Listener {
         e.setCancelled(true);
         if(item == null) return;
         if(e.getAction().equals(Action.RIGHT_CLICK_AIR) ||
-                e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if(item.getType().equals(Material.RECOVERY_COMPASS)) {
+                e.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
+                        item.getType().equals(Material.RECOVERY_COMPASS)) {
                 player.openInventory(mainMenu.getInventory(player));
-            }
+
         }
     }
 

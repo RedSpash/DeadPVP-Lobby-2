@@ -1,11 +1,11 @@
 package net.deadpvp.lobby.variables;
 
-import net.deadpvp.lobby.Utils;
 import net.deadpvp.lobby.players.PlayerManager;
 import net.deadpvp.lobby.server.BungeeManager;
-import org.bukkit.Bukkit;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -41,6 +41,8 @@ public class VariableManager {
                 if(action.equalsIgnoreCase("playercount")){
                     replaceBy = String.valueOf(this.bungeeManager.getConnectedPlayer(server));
                 }
+            }else if(correctedVariable.startsWith("0x")){
+                replaceBy = ChatColor.of(Color.decode(correctedVariable))+"";
             }else if(p != null){
                 if (correctedVariable.equalsIgnoreCase("name") || correctedVariable.equalsIgnoreCase("player")) {
                     replaceBy = p.getName();
@@ -56,7 +58,7 @@ public class VariableManager {
         return correctedText;
     }
 
-    public List<String> getVariablesFromText(String text) {
+    private List<String> getVariablesFromText(String text) {
         List<String> result = new ArrayList<>();
 
         Pattern pattern = Pattern.compile("\\{(.*?)\\}");

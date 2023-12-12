@@ -18,9 +18,9 @@ public class RedScoreBoard {
     private ArrayList<String> lineText;
     private final UUID uuid;
 
-    public RedScoreBoard(Player p, String title,ArrayList<String> lineText, VariableManager variableManager){
+    public RedScoreBoard(Player p, String title,List<String> lineText, VariableManager variableManager){
         this.variableManager = variableManager;
-        this.lineText = lineText;
+        this.lineText = new ArrayList<>(lineText);
         this.lines = new HashMap<>();
         this.board = Bukkit.getScoreboardManager().getNewScoreboard();
         this.uuid = p.getUniqueId();
@@ -43,7 +43,7 @@ public class RedScoreBoard {
         if(!lines.containsKey(position)){
             this.createTeam(position,text);
         }else{
-            this.setTeamName(lines.get(position),text,position);
+            this.setTeamName(lines.get(position),text);
         }
     }
 
@@ -53,12 +53,12 @@ public class RedScoreBoard {
         team.addEntry(chatColors.get(position)+"");
         this.objective.getScore(chatColors.get(position)+"").setScore(position);
 
-        setTeamName(team,text,position);
+        setTeamName(team,text);
 
         lines.put(position,team);
     }
 
-    private void setTeamName(Team team, String text, Integer position) {
+    private void setTeamName(Team team, String text) {
         team.setPrefix(text);
     }
 

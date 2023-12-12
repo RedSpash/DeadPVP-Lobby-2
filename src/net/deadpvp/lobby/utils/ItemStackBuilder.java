@@ -27,12 +27,6 @@ public class ItemStackBuilder {
         this.itemStack = new ItemStack(m, amount);
     }
 
-
-    public ItemStackBuilder clone() {
-        return new ItemStackBuilder(this.itemStack);
-    }
-
-
     public ItemStackBuilder setDurability(short dur) {
         this.itemStack.setDurability(dur);
         return this;
