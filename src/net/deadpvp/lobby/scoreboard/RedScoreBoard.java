@@ -24,7 +24,7 @@ public class RedScoreBoard {
         this.lines = new HashMap<>();
         this.board = Bukkit.getScoreboardManager().getNewScoreboard();
         this.uuid = p.getUniqueId();
-        this.objective = board.registerNewObjective(title,"dummy");
+        this.objective = board.registerNewObjective(this.variableManager.getStringWithReplacedVariables(title), "dummy");
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         this.update();
