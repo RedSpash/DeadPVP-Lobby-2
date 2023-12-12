@@ -27,15 +27,16 @@ public class RankManager {
         try {
             Connection connection = sqlManager.getConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT permission,color,prefix,power FROM prefix ORDER BY power ASC");
+            ResultSet resultSet = statement.executeQuery("SELECT permission,longName,color,prefix,power FROM prefix ORDER BY power ASC");
 
             while (resultSet.next()){
                 String permission = resultSet.getString("permission");
                 String color = resultSet.getString("color");
                 String prefix = resultSet.getString("prefix");
                 int power = resultSet.getInt("power");
+                String longName = resultSet.getString("longName");
 
-                this.ranks.add(new Rank(power,permission,prefix,color));
+                this.ranks.add(new Rank(power,permission,prefix,longName,color));
             }
             statement.close();
         } catch (SQLException e) {
