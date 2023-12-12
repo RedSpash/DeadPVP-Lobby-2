@@ -124,13 +124,15 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onInteract (PlayerInteractEvent e) {
+    public void onInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
+        if(player.getGameMode() != GameMode.CREATIVE || !player.hasPermission("deadpvp.staff.dev")){
+            e.setCancelled(true);
+        }
         ItemStack item = e.getItem();
-        e.setCancelled(true);
         if(item == null) return;
-        if(e.getAction().equals(Action.RIGHT_CLICK_AIR) ||
-                e.getAction().equals(Action.RIGHT_CLICK_BLOCK) &&
+        if((e.getAction().equals(Action.RIGHT_CLICK_AIR) ||
+                e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) &&
                         item.getType().equals(Material.RECOVERY_COMPASS)) {
                 player.openInventory(mainMenu.getInventory(player));
 

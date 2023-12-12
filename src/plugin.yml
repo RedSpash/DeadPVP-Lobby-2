@@ -6,5 +6,5 @@ author: 'Red_Spash'
 description: 'Plugin de lobby pour DEADPVP'
 commands:
   update:
-    permission: op
+    permission: deadpvp.staff.developer
 

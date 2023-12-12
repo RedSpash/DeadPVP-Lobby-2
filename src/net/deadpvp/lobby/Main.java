@@ -10,7 +10,7 @@ import net.deadpvp.lobby.players.PlayerManager;
 import net.deadpvp.lobby.rank.RankManager;
 import net.deadpvp.lobby.scoreboard.ScoreboardManager;
 import net.deadpvp.lobby.server.BungeeManager;
-import net.deadpvp.lobby.server.tasks.UpdatePlayerCount;
+import net.deadpvp.lobby.server.tasks.UpdateBungeeData;
 import net.deadpvp.lobby.sql.SQLManager;
 import net.deadpvp.lobby.variables.VariableManager;
 import org.bukkit.Bukkit;
@@ -57,11 +57,13 @@ public class Main extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(this.playerListener,this);
             Bukkit.getPluginManager().registerEvents(new InventoryListeners(mainMenu),this);
 
-            new UpdatePlayerCount(this.bungeeManager).runTaskTimer(this, 1L, 20L*60);
+            new UpdateBungeeData(this.bungeeManager).runTaskTimer(this, 1L, 20L*15);
             this.scoreboardManager.runTaskTimer(this,1L,20L*2);
 
-            this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-            this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord",this.bungeeManager);
+            this.getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeManager.BUNGEE_CORD_CHANNEL);
+            this.getServer().getMessenger().registerOutgoingPluginChannel(this, BungeeManager.DEADPVP_CHANNEL);
+            this.getServer().getMessenger().registerIncomingPluginChannel(this, BungeeManager.BUNGEE_CORD_CHANNEL,this.bungeeManager);
+            this.getServer().getMessenger().registerIncomingPluginChannel(this, BungeeManager.DEADPVP_CHANNEL,this.bungeeManager);
 
             this.getCommand("update").setExecutor(new UpdateData(this.configuration,this.playerListener, this.mainMenu,this.scoreboardManager, this.rankManager, this.playerManager));
 

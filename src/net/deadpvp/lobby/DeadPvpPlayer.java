@@ -30,7 +30,7 @@ public class DeadPvpPlayer {
         if(p != null){
             for(Rank rank : this.rankManager.getRanks()){
                 if(rank.hasPermission(p)){
-                    this.rankName = rank.getName();
+                    this.rankName = rank.getLongName();
                     this.rankColor = rank.getColor();
                     break;
                 }
