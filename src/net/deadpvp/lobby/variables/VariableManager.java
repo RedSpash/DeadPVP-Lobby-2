@@ -23,7 +23,7 @@ public class VariableManager {
 
     public String getStringWithReplacedVariables(String text, Player p){
         // {player} -> nom du joueur
-        // {all.playercount} -> nombre de joueur
+        // {all.playercount} -> nombre de joueurs
         // {rank} -> nom du rank
         // {rankcolor} -> couleur du rank
         List<String> variables = this.getVariablesFromText(text);
@@ -40,6 +40,8 @@ public class VariableManager {
                 String action = correctedVariable.split("\\.")[1];
                 if(action.equalsIgnoreCase("playercount")){
                     replaceBy = String.valueOf(this.bungeeManager.getConnectedPlayer(server));
+                } else if (action.equalsIgnoreCase("status")) {
+                    replaceBy = String.valueOf(this.bungeeManager.getStatus(server));
                 }
             }else if(correctedVariable.startsWith("0x")){
                 replaceBy = ChatColor.of(Color.decode(correctedVariable))+"";
