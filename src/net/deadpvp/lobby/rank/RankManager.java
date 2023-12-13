@@ -12,7 +12,7 @@ import java.util.List;
 public class RankManager {
 
     private final SQLManager sqlManager;
-
+    private String rankFormat;
     private final ArrayList<Rank> ranks;
 
     public RankManager(SQLManager sqlManager){
@@ -38,7 +38,14 @@ public class RankManager {
 
                 this.ranks.add(new Rank(power,permission,prefix,longName,color));
             }
+
+            resultSet = statement.executeQuery("SELECT value FROM settings WHERE id = 'rank.format'");
+            resultSet.next();
+
+            this.rankFormat = resultSet.getString("value");
+
             statement.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -46,5 +53,9 @@ public class RankManager {
 
     public List<Rank> getRanks() {
         return ranks;
+    }
+
+    public String getRankFormat() {
+        return rankFormat;
     }
 }
