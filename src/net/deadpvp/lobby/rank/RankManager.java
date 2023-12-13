@@ -60,6 +60,7 @@ public class RankManager {
         return rankFormat
                 .replace("{rankcolor}",deadPvpPlayer.getRankColor())
                 .replace("{rankname}",deadPvpPlayer.getRankName())
-                .replace("{ranklongname}",deadPvpPlayer.getLongRankName());
+                .replace("{ranklongname}",deadPvpPlayer.getLongRankName())
+                .replace("{rank}",deadPvpPlayer.getRankColor()+deadPvpPlayer.getRankName());
     }
 }

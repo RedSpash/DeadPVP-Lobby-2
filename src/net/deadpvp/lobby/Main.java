@@ -52,7 +52,7 @@ public class Main extends JavaPlugin {
             this.scoreboardManager = new ScoreboardManager(this.configuration,this.variableManager);
             this.mainMenu = new MainMenu(this.configuration,this.bungeeManager,this.variableManager);
 
-            this.playerListener = new PlayerListener(this.variableManager, this.configuration,this.mainMenu,this.scoreboardManager,this.playerManager);
+            this.playerListener = new PlayerListener(this.variableManager, this.rankManager,this.configuration,this.mainMenu,this.scoreboardManager,this.playerManager);
             Bukkit.getPluginManager().registerEvents(new ProtectionListener(),this);
             Bukkit.getPluginManager().registerEvents(this.playerListener,this);
             Bukkit.getPluginManager().registerEvents(new InventoryListeners(mainMenu),this);
