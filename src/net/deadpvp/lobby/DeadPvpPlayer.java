@@ -10,9 +10,8 @@ import java.util.UUID;
 public class DeadPvpPlayer {
 
     private final RankManager rankManager;
-    private String rankName;
-    private String rankColor;
     private final UUID uuid;
+    private Rank rank;
 
     public DeadPvpPlayer(Player p, RankManager rankManager){
         this.uuid = p.getUniqueId();
@@ -24,14 +23,10 @@ public class DeadPvpPlayer {
     public void updateData() {
         Player p = Bukkit.getPlayer(this.uuid);
 
-        this.rankName = "Chargement...";
-        this.rankColor = "§7";
-
         if(p != null){
             for(Rank rank : this.rankManager.getRanks()){
                 if(rank.hasPermission(p)){
-                    this.rankName = rank.getLongName();
-                    this.rankColor = rank.getColor();
+                    this.rank = rank;
                     break;
                 }
             }
@@ -39,10 +34,14 @@ public class DeadPvpPlayer {
     }
 
     public String getRankColor() {
-        return rankColor;
+        return this.rank.getColor();
     }
 
     public String getRankName() {
-        return rankName;
+        return this.rank.getPrefix();
+    }
+
+    public String getLongRankName() {
+        return this.rank.getLongName();
     }
 }

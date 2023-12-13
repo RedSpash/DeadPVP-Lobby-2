@@ -1,8 +1,10 @@
 package net.deadpvp.lobby.listeners;
 
+import net.deadpvp.lobby.DeadPvpPlayer;
 import net.deadpvp.lobby.config.Configuration;
 import net.deadpvp.lobby.menu.MainMenu;
 import net.deadpvp.lobby.players.PlayerManager;
+import net.deadpvp.lobby.rank.RankManager;
 import net.deadpvp.lobby.scoreboard.ScoreboardManager;
 import net.deadpvp.lobby.utils.ItemStackBuilder;
 import net.deadpvp.lobby.variables.VariableManager;
@@ -28,16 +30,18 @@ public class PlayerListener implements Listener {
     private final ScoreboardManager scoreboardManager;
     private final Configuration configuration;
     private final VariableManager variableManager;
+    private final RankManager rankManager;
     private WelcomeTitle welcomeTitle;
     private Location spawn;
 
-    public PlayerListener(VariableManager variableManager, Configuration configuration, MainMenu mainMenu, ScoreboardManager scoreboardManager, PlayerManager playerManager){
+    public PlayerListener(VariableManager variableManager, RankManager rankManager, Configuration configuration, MainMenu mainMenu, ScoreboardManager scoreboardManager, PlayerManager playerManager){
         this.variableManager = variableManager;
         this.mainMenu = mainMenu;
         this.configuration = configuration;
         this.updateSpawnLocation();
         this.scoreboardManager = scoreboardManager;
         this.playerManager = playerManager;
+        this.rankManager =rankManager;
 
         this.updateWelcomeTitle();
     }
@@ -93,7 +97,8 @@ public class PlayerListener implements Listener {
                 p.hasPermission ("chat.modo") ||
                 p.hasPermission ("chat.admin") ||
                 p.hasPermission ("chat.dev"))) {
-            e.setJoinMessage("§c" + p.getName () + " §6vient de rejoindre le lobby!");
+            DeadPvpPlayer deadPvpPlayer = this.playerManager.getData(p.getUniqueId());
+            e.setJoinMessage(this.rankManager.getRankFormat(deadPvpPlayer)+" "+deadPvpPlayer.getRankColor() + p.getName () + " §6vient de rejoindre le lobby!");
             p.getWorld().strikeLightningEffect(p.getLocation());
         }else{
             e.setJoinMessage("");
