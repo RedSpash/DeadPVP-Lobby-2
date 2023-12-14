@@ -18,10 +18,17 @@ public class PlayerManager {
     }
 
     public void insertNewPlayer(Player p){
-        this.playerData.put(p.getUniqueId(),new DeadPvpPlayer(p,this.rankManager));
+        this.insertNewPlayer(p.getUniqueId());
+    }
+
+    public void insertNewPlayer(UUID uuid){
+        this.playerData.put(uuid,new DeadPvpPlayer(uuid,this.rankManager));
     }
 
     public DeadPvpPlayer getData(UUID uuid){
+        if(!this.playerData.containsKey(uuid)) {
+            this.insertNewPlayer(uuid);
+        }
         return this.playerData.getOrDefault(uuid,null);
     }
 

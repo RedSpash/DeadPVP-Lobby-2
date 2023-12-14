@@ -13,8 +13,8 @@ public class DeadPvpPlayer {
     private final UUID uuid;
     private Rank rank;
 
-    public DeadPvpPlayer(Player p, RankManager rankManager){
-        this.uuid = p.getUniqueId();
+    public DeadPvpPlayer(UUID uuid, RankManager rankManager){
+        this.uuid = uuid;
         this.rankManager = rankManager;
 
         this.updateData();
@@ -43,5 +43,9 @@ public class DeadPvpPlayer {
 
     public String getLongRankName() {
         return this.rank.getLongName();
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }

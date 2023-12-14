@@ -1,8 +1,10 @@
 package net.deadpvp.lobby.variables;
 
+import net.deadpvp.lobby.DeadPvpPlayer;
 import net.deadpvp.lobby.players.PlayerManager;
 import net.deadpvp.lobby.server.BungeeManager;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.awt.*;
@@ -46,18 +48,57 @@ public class VariableManager {
             }else if(correctedVariable.startsWith("0x")){
                 replaceBy = ChatColor.of(Color.decode(correctedVariable))+"";
             }else if(p != null){
-                if (correctedVariable.equalsIgnoreCase("name") || correctedVariable.equalsIgnoreCase("player")) {
-                    replaceBy = p.getName();
-                }else if (correctedVariable.equalsIgnoreCase("rankcolor")) {
-                    replaceBy = this.playerManager.getData(p.getUniqueId()).getRankColor();
-                }else if (correctedVariable.equalsIgnoreCase("rank")) {
-                    replaceBy = this.playerManager.getData(p.getUniqueId()).getRankName();
-                }
+                replaceBy = this.playerVariables(correctedVariable,this.playerManager.getData(p.getUniqueId()));
             }
             correctedText = correctedText.replace("{"+variable+"}",replaceBy);
-
         }
         return correctedText;
+    }
+
+    public String replacePlayerVariables(String text, DeadPvpPlayer deadPvpPlayer){
+        List<String> variables = this.getVariablesFromText(text);
+        String correctedText = text;
+
+        for(String variable : variables) {
+            String correctedVariable = variable;
+            if (correctedVariable.startsWith("§")) {
+                correctedVariable = correctedVariable.substring(2);
+            }
+            correctedText = correctedText.replace("{"+variable+"}",this.playerVariables(correctedVariable,deadPvpPlayer));
+        }
+        return correctedText;
+    }
+
+    private String playerVariables(String correctedVariable, DeadPvpPlayer deadPvpPlayer){
+        switch (correctedVariable.toLowerCase()){
+            case "name", "player" ->{
+                Player p = Bukkit.getPlayer(deadPvpPlayer.getUuid());
+                if(p != null){
+                    return  p.getName();
+                }
+                return "§7Chargement...";
+            }
+            case "rankcolor" -> {
+                return deadPvpPlayer.getRankColor();
+            }
+            case "rankname" -> {
+                return deadPvpPlayer.getRankName();
+            }
+            case "ranklongname" -> {
+                return deadPvpPlayer.getLongRankName();
+            }
+            case "rank" -> {
+                return deadPvpPlayer.getRankColor()+deadPvpPlayer.getRankName();
+            }
+            default -> {
+                return "UNKNOW";
+            }
+        }
+
+    }
+
+    public String replacePlayerVariables(String correctedVariable, Player p) {
+        return this.playerVariables(correctedVariable,this.playerManager.getData(p.getUniqueId()));
     }
 
     private List<String> getVariablesFromText(String text) {

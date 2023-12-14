@@ -44,10 +44,10 @@ public class Main extends JavaPlugin {
                 //return;
             }
 
+            this.configuration = new Configuration(this.getDataFolder());
+            this.bungeeManager = new BungeeManager();
             this.rankManager = new RankManager(this.sqlManager);
             this.playerManager = new PlayerManager(this.rankManager);
-            this.bungeeManager = new BungeeManager();
-            this.configuration = new Configuration(this.getDataFolder());
             this.variableManager = new VariableManager(this.bungeeManager,this.playerManager);
             this.scoreboardManager = new ScoreboardManager(this.configuration,this.variableManager);
             this.mainMenu = new MainMenu(this.configuration,this.bungeeManager,this.variableManager);

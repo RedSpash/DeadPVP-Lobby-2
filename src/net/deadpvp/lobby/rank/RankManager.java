@@ -2,6 +2,7 @@ package net.deadpvp.lobby.rank;
 
 import net.deadpvp.lobby.DeadPvpPlayer;
 import net.deadpvp.lobby.sql.SQLManager;
+import net.deadpvp.lobby.variables.VariableManager;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -56,11 +57,8 @@ public class RankManager {
         return ranks;
     }
 
-    public String getRankFormat(DeadPvpPlayer deadPvpPlayer) {
-        return rankFormat
-                .replace("{rankcolor}",deadPvpPlayer.getRankColor())
-                .replace("{rankname}",deadPvpPlayer.getRankName())
-                .replace("{ranklongname}",deadPvpPlayer.getLongRankName())
-                .replace("{rank}",deadPvpPlayer.getRankColor()+deadPvpPlayer.getRankName());
+    public String getRankFormat() {
+        return this.rankFormat;
+
     }
 }

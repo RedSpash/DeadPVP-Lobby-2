@@ -98,7 +98,7 @@ public class PlayerListener implements Listener {
                 p.hasPermission ("chat.admin") ||
                 p.hasPermission ("chat.dev"))) {
             DeadPvpPlayer deadPvpPlayer = this.playerManager.getData(p.getUniqueId());
-            e.setJoinMessage(this.rankManager.getRankFormat(deadPvpPlayer)+" "+deadPvpPlayer.getRankColor() + p.getName () + " §6vient de rejoindre le lobby!");
+            e.setJoinMessage(this.variableManager.replacePlayerVariables(this.rankManager.getRankFormat(),p)+" "+deadPvpPlayer.getRankColor() + p.getName () + " §6vient de rejoindre le lobby!");
             p.getWorld().strikeLightningEffect(p.getLocation());
         }else{
             e.setJoinMessage("");
