@@ -91,14 +91,14 @@ public class VariableManager {
                 return deadPvpPlayer.getRankColor()+deadPvpPlayer.getRankName();
             }
             default -> {
-                return "UNKNOW";
+                return "";
             }
         }
 
     }
 
     public String replacePlayerVariables(String correctedVariable, Player p) {
-        return this.playerVariables(correctedVariable,this.playerManager.getData(p.getUniqueId()));
+        return this.replacePlayerVariables(correctedVariable,this.playerManager.getData(p.getUniqueId()));
     }
 
     private List<String> getVariablesFromText(String text) {

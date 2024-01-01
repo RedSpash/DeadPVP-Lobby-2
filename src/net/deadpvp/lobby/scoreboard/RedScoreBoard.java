@@ -24,7 +24,11 @@ public class RedScoreBoard {
         this.lines = new HashMap<>();
         this.board = Bukkit.getScoreboardManager().getNewScoreboard();
         this.uuid = p.getUniqueId();
-        this.objective = board.registerNewObjective(this.variableManager.getStringWithReplacedVariables(title), "dummy");
+        if(board.getObjective(this.variableManager.getStringWithReplacedVariables(title)) == null){
+            this.objective = board.registerNewObjective(this.variableManager.getStringWithReplacedVariables(title), "dummy");
+        }else{
+            this.objective = board.getObjective(this.variableManager.getStringWithReplacedVariables(title));
+        }
         this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         this.update();
@@ -48,8 +52,10 @@ public class RedScoreBoard {
     }
 
     private void createTeam(Integer position,String text) {
-        Team team = board.registerNewTeam(chatColors.get(position)+"");
-
+        Team team = board.getTeam(chatColors.get(position)+"");
+        if(team == null){
+            team = board.registerNewTeam(chatColors.get(position)+"");
+        }
         team.addEntry(chatColors.get(position)+"");
         this.objective.getScore(chatColors.get(position)+"").setScore(position);
 

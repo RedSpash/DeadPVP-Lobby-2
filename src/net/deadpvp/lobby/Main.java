@@ -89,6 +89,10 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable(){
         this.sqlManager.close();
+        this.getServer().getMessenger().unregisterOutgoingPluginChannel(this, BungeeManager.BUNGEE_CORD_CHANNEL);
+        this.getServer().getMessenger().unregisterOutgoingPluginChannel(this, BungeeManager.DEADPVP_CHANNEL);
+        this.getServer().getMessenger().unregisterIncomingPluginChannel(this, BungeeManager.BUNGEE_CORD_CHANNEL,this.bungeeManager);
+        this.getServer().getMessenger().unregisterIncomingPluginChannel(this, BungeeManager.DEADPVP_CHANNEL,this.bungeeManager);
     }
 
 

@@ -2,6 +2,7 @@ package net.deadpvp.lobby.menu;
 
 import net.deadpvp.lobby.config.Configuration;
 import net.deadpvp.lobby.menu.commands.*;
+import net.deadpvp.lobby.menu.commands.InventoryCommand;
 import net.deadpvp.lobby.server.BungeeManager;
 import net.deadpvp.lobby.utils.ItemStackBuilder;
 import net.deadpvp.lobby.variables.VariableManager;
@@ -85,7 +86,7 @@ public class MainMenu {
                             }
                             case "inventory"-> command = new InventoryCommand(this.fileConfiguration.getString(actionPath,""));
                             default ->
-                                command = new SendMessageCommand("§c§lCette item n'est pas configuré correctement!");
+                                command = new SendMessageCommand("§c§lCet item n'est pas configuré correctement!");
 
                         }
                         commands.add(command);

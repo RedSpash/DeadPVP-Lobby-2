@@ -24,10 +24,10 @@ public class SQLManager {
 
         try {
             synchronized (this) {
-                if (this.getConnection() != null && !this.getConnection().isClosed()) {
+                if (this.connection != null && !this.getConnection().isClosed()) {
                     return;
                 }
-                this.connection = DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+database, username,password);
+                this.connection = DriverManager.getConnection("jdbc:mysql://"+host+":"+port+"/"+database+"?autoReconnect=true", username,password);
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL CONNECTED");
             }
         } catch (SQLException throwable) {
@@ -37,6 +37,13 @@ public class SQLManager {
     }
 
     public Connection getConnection() {
+        try {
+            if(this.connection == null || this.connection.isClosed()){
+                this.mysqlSetup();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return connection;
     }
 
